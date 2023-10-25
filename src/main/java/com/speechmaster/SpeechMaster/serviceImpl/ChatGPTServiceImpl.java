@@ -57,7 +57,8 @@ public class ChatGPTServiceImpl implements ChatGPTService {
                 return "failed";
             }
         }catch(Exception ex){
-            return "failed";
+            ex.toString();
         }
+        return "failed";
     }
 }

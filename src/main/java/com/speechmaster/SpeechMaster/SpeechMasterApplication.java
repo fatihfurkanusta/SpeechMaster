@@ -9,5 +9,4 @@ public class SpeechMasterApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpeechMasterApplication.class, args);
 	}
-
 }
