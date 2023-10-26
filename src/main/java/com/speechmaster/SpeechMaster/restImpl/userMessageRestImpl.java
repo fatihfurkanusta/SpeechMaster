@@ -10,4 +10,11 @@ public class userMessageRestImpl implements UserMessageRest {
         System.out.println("Message: " + message);
         return "Success.";
     }
+
+    @Override
+    public String getChatGPTMessage() {
+        return "Hello World";
+    }
+
+
 }

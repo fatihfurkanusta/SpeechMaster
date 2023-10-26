@@ -54,11 +54,11 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
                 return chatGPTResponse.getChoices().get(0).getText();
             } catch (Exception ex) {
-                return "failed";
+                return "failed 1 ";
             }
         }catch(Exception ex){
             ex.toString();
         }
-        return "failed";
+        return "failed 2";
     }
 }

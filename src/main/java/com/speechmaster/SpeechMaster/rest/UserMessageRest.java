@@ -1,14 +1,14 @@
 package com.speechmaster.SpeechMaster.rest;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/userMessage")
 @CrossOrigin(origins = "*")
 public interface UserMessageRest {
 
-    @PostMapping("/get")
+    @PostMapping("/post")
     public String getUserMessage(@RequestBody String message);
+
+    @GetMapping("/get")
+    public String getChatGPTMessage();
 }
