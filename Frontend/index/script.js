@@ -1,3 +1,4 @@
+const inputDiv = document.querySelector('.text-input');
 const text = document.querySelector('.send-text');
 const listText = document.querySelector('.list-text');
 const chatboxTop = document.querySelector('.chatbox-top');
@@ -13,6 +14,7 @@ recognition.lang = 'en-US';
 let p = document.createElement('p');
 var createdText = '';
 let data = '';
+let chatGPTResponse = '';
 
 function speechToText(){
     
@@ -23,9 +25,7 @@ function speechToText(){
             .map(result => result.transcript)
             .join('');
 
-        
-        p.innerText = createdText;
-        text.appendChild(p);
+        text.value = createdText;
 
         console.log(e);
     });
@@ -34,54 +34,58 @@ function speechToText(){
 function sendMessage(){
     let li = document.createElement('li');
     let sendP = document.createElement('p');
-    sendP.innerText = createdText;
+    sendP.innerText = text.value;
     
     sendP.style.float = "right";
     sendP.style.background = "lightgrey";
 
     li.appendChild(sendP);
     listText.appendChild(li);
-    data = createdText;
+    data = text.value;
 
-    p.innerText = '';
-    text.appendChild(p);
+    text.value = '';
 }
 
 function postData(){
-    
-    var url = "http://localhost:8080/userMessage/post";
+    var url = "http://localhost:8081/api/searchChatGPT";
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
     xhr.setRequestHeader('Content-type', 
-    'application/json; charset=utf-8');
-    xhr.onloadend = function () {
+    'application/json');
+
+    /* xhr.onloadend = function () {
         console.log(xhr.status);
         console.log(xhr.readyState);
-    }
-    xhr.send(data);
+    }; */
+    
+    const dataJson = `{
+        "query": "${data}"
+    }`;
+
+
+    xhr.send(dataJson);
     console.log(xhr.responseText);
+
+
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+          chatGPTResponse = xhr.responseText;
+        } else {
+          console.log(xhr.status);
+        }
+    };
 }
 
-async function transmitChatGPTMessage(){
-    var url = "http://localhost:8080/userMessage/get";
-    let a = '';
-    const response = fetch(url);
-    response.then((response) => {
-        response.text().then((text) => {
-            a = text;
-            showResponse(text);
-            console.log("sdsa"+a);
-        });
-    });
-
-    console.log("sdssdsda"+a);
-}
-
-function showResponse(chatGPTResponse){
+function showResponse(){
     let li = document.createElement('li');
     let sendP = document.createElement('p');
-    sendP.innerText = chatGPTResponse;
+
+    if(chatGPTResponse != null){
+        sendP.innerText = chatGPTResponse;
+    }else{
+        sendP.innerText = 'Please try again.'
+    }
 
     li.appendChild(sendP);
     listText.appendChild(li);
@@ -113,5 +117,9 @@ sendButton.addEventListener('click', ()=>{
     sendMessage();
     recognition.stop();
     postData();
-    transmitChatGPTMessage();
+    setTimeout(() => {
+        showResponse();
+    }, 6000);
 });
+
+text.addEventListener('')

@@ -4,6 +4,7 @@ import com.speechmaster.SpeechMaster.model.SearchRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public interface ChatGPTRest {
 
     @PostMapping(path = "/searchChatGPT")

@@ -21,11 +21,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ChatGPTServiceImpl implements ChatGPTService {
 
+    public static String response1;
+
+
     @Override
     public String processChatGPTSearch(String query) {
 
         ChatGPTRequest chatGPTRequest = new ChatGPTRequest();
-        chatGPTRequest.setPrompt(query);
+        String request = "'" + query + "' Score this paragraph out of 10 according to Grammar, Vocabulary, Topic Knowledge and Content, Meaning, Context and Expression, Complexity of the Sentence. Later, correct the paragraph.";
+        chatGPTRequest.setPrompt(request);
 
         HttpPost post = new HttpPost(Constant.OPEN_AI_URL);
         post.addHeader("Content-Type", "application/json");
@@ -52,9 +56,11 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
                 ChatGPTResponse chatGPTResponse = gson.fromJson(responseBody, ChatGPTResponse.class);
 
+                response1 = chatGPTResponse.getChoices().get(0).getText();
+
                 return chatGPTResponse.getChoices().get(0).getText();
             } catch (Exception ex) {
-                return "failed 1 ";
+                return "failed";
             }
         }catch(Exception ex){
             ex.toString();
